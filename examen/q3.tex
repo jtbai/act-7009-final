@@ -1,0 +1,48 @@
+\section{Question 3}
+
+Soit les trois mesures de risque suivantes :\\
+$\rho^a= sup\{L(w_i) : i= 1,2,...,m\}$\\
+$\rho^b=  sup\{L(w_i) : i= 1,2,...,m\}$\\
+$\rho^c= sup\{\frac{L(w_i)+L(w_j)}{2} : i \neq j \in \{1,2,...,m\}\}$\\
+
+
+\textbf{a. preuve de l'homogénéité des mesures $\rho^a, \rho^b, \rho^c$}\\
+\textbf{$\rho^a$}\\
+$sup\{L(cw_i)\} = sup\{cL(w_i)\}$\\
+$ = c*sup\{L(w_i)\}$\\
+
+\textbf{$\rho^b$}\\
+$sup\{L(cw_i)\} = sup\{cL(w_i)\}$\\
+$ = c*sup\{L(w_i)\}$\\
+
+\textbf{$\rho^c$}\\
+$sup\{\frac{L(cw_i)+L(cw_j)}{2}\} = sup\{\frac{cL(w_i)+cL(w_j)}{2}\}$\\
+$ = sup\{\frac{2*c}{2} \frac{L(w_i)+L(w_j)}{2}\}$\\
+$ = c*sup\{ \frac{L(w_i)+L(w_j)}{2}\}$\\
+
+\textbf{b. preuve de monotonicite des mesures $\rho^a, \rho^b, \rho^c$}\\
+???\\
+
+\textbf{c. preuve d'invariance a la translation des mesures $\rho^a, \rho^b, \rho^c$}\\
+
+\textbf{$\rho^a$}\\
+$sup\{L(w_i+a)\} = sup\{L(w_i)+a\}$\\
+$ = sup\{L(w_i)\} + a$\\
+
+\textbf{$\rho^b$}\\
+$sup\{L(w_i+a)\} = sup\{L(w_i)+a\}$\\
+$ = sup\{L(w_i)\}+a$\\
+
+\textbf{$\rho^c$}\\
+$sup\{\frac{L(w_i+a)+L(w_j+a)}{2}\} = sup\{\frac{L(w_i)+a+L(w_j)+a}{2}}\}$\\
+$ = sup\{\frac{2*a}{2} + \frac{L(w_i)+L(w_j)}{2}\}$\\
+$ = sup\{ \frac{L(w_i)+L(w_j)}{2}\} + a$\\
+
+\textbf{d. preuve de sous-additivite des mesures $\rho^a, \rho^b, \rho^c$}\\
+???\\
+
+\textbf{e. interpretation des mesures $\rho^a, \rho^b, \rho^c$}\\
+$\rho^a$ : maximum des pertes\\
+$\rho^b$ : $var_{99}$ des pertes\\
+$\rho^c$ : $cte_{98}$ des pertes\\
+
