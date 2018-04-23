@@ -1,0 +1,16 @@
+\section{Question 4}
+
+Soit les trois mesures de risque suivantes :\\
+$\rho^a= sup\{L(w_i) : i= 1,2,...,m\}$\\
+$\rho^b=  sup\{L(w_i) : i= 1,2,...,m\}$\\
+$\rho^c= sup\{\frac{L(w_i)+L(w_j)}{2} : i \neq j \in \{1,2,...,m\}\}$\\
+
+\textbf{a. Definir les regions d'acceptation}\\
+$A_{\rho^{a}} = \{ L \in \aleph : P(L>0) = 0  \} $\\
+$A_{\rho^{b}} = \{ L \in \aleph : Pr(L>0) < \frac{1}{m} \} $\\
+$A_{\rho^{c}} = \{ L \in \aleph : Pr(L>\rho^c(L)) < \frac{1}{m} \} $\\
+
+\textbf{b. Interpreter ces regions d'acceptation}\\
+$\rho^a$: Le regulateur n'accepte que les montant de capital assurant la couverture de toutes perte, quelle qu'elle soit.\\
+$\rho^b$: Le régulateur accepte que la compagnie fasse faillite une fois sur $m$.\\
+$\rho^c$: Le régulateur accepte que la compagnie fasse faillite une fois sur deux lorsqu'elle est confrontée aux pire pertes passées un les $m-2$ pires. Pour y arriver la compagnie doit mettre le capital au moins égal à la moitié des pires pertes.\\
