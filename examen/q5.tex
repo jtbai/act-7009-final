@@ -1,0 +1,64 @@
+\section{Question 5}
+
+a. Calculer $\rho_{0.999}(X_i), i=1,2 $ et $\rho_{0.999}(X_1+X_2) $ \\
+(voir developpement en R)\\
+
+$ \rho_{0.999}(X_1) = 41.74523 $\\
+$ \rho_{0.999}(X_2) =  41.29535 $\\
+$ \rho_{0.999}(X_1 + X_2) =  73.75778 <= \rho_{0.999}(X_1) + \rho_{0.999}(X_2) = 83.04058$ \\
+
+
+b. Calculer $\rho_{0.999}(Y_i), i=1,2 $ et $\rho_{0.999}(Y_1+Y_2) $ \\
+(voir developpement en R)\\
+
+$ \rho_{0.999}(X_1) = 41.74523 $\\
+$ \rho_{0.999}(X_2) =  41.29535 $\\
+$ \rho_{0.999}(X_1 + X_2) =  68.22632 <= \rho_{0.999}(X_1) + \rho_{0.999}(X_2) = 83.04058$ \\
+
+c. Calculez $P(X_1 < X_2)$ et $P(y_1 < Y_2)$ \\
+$P(X_1 < X_2) = 5/9$\\  
+$P(y_1 < Y_2) = 5/9$\\
+
+d. i. Vrai, la mesure est homogene. Cette propriete stipule qu'un risque se realisant a un certain niveau, peut importe comment il est inflationne, aura une mesure de risque suivant cette inflation. Ainsi on peut penser que dans le cas d'un changement de devise il serait surprenant qu'un evenement soit plus risque. Dans le cas ou une position plus grande est prise dans un certain risque, il est attendu que la mesure associee grandisse d'un facteur equivalent. Voir la question 2 pour une critique de cette propriete.\\
+
+$\rho(Z*c) = E[Z*c] + \sqrt{Var(Z*c)} * \psi(\kappa)$\\
+$\rho(Z*c) = E[Z]*c + \sqrt{c^2*Var(Z)} * \psi(\kappa)$\\
+$\rho(Z*c) = E[Z]*c + c*\sqrt{Var(Z)} * \psi(\kappa)$\\
+$\rho(Z*c) = c * (E[Z] + \sqrt{Var(Z)} * \psi(\kappa)) = c*\rho(Z)$\\
+
+d. ii. Vrai, la mesure est invariante a la translation. L'invariance a la translation est une propriete d'une mesure de risque qui stipule que pour certain niveau de capital supporant le risque est investi ou desinvesti, la valeur de ce risque sera exatement offsete par ce montant. Ainsi, une perte L et un capital c (constituant un portefeuille de risque ayant comme perte globale la v.a. $S = L-c$), on s'attend a ce que c\$ soient d/duits de la perte et que la mesure de risque soit reduite de ce montant. \\
+
+$\rho(Z+c) = E[Z+c] + \sqrt{Var(Z*c)} * \psi(\kappa)$\\
+$\rho(Z+c) = E[Z]+c + \sqrt{0+Var(Z)} * \psi(\kappa)$\\
+$\rho(Z+c) = E[Z]+c + \sqrt{Var(Z)} * \psi(\kappa)$\\
+$\rho(Z+c) = c + (E[Z] + \sqrt{Var(Z)} * \psi(\kappa)) = c + \rho(Z)$\\
+
+c. iii. prouver la sous-additivite\\
+???\\
+
+c. iv. Vrai \\
+- invariance a la translation prouvee en ii\\
+- $\rho(c) = c$\\
+
+$\rho(c) = E[c] + \sqrt{Var(c)} * \psi(\kappa)$\\
+$\rho(c) = E[c] + \sqrt{0} * \psi(\kappa)$\\
+$\rho(c) = E[c] + 0 = c$\\
+
+c. v. prouver la monotonicite\\
+???\\
+
+c. vi. Mesure monetaire\\
+- Monotonicite prouvee en v.\\
+- Invariance a la translation prouvee en ii.\\ 
+
+c. vii. Vrai, c'est une mesure de risque convexe. \\
+$\rho(\lambda X_1 + (1-\lambda)X_2) \leq \lambda*\rho(X_1) + (1-\lambda)*\rho(X_2)$\\
+- trivial, en utilisant:\\
+- utiliser la propri/t/ de sous-additivite (prouvee en iii)\\
+- utiliser la propri/t/ d'homogeneite (prouvee en i)\\
+
+c. viii. Vrai, il s'agit d'une mesure coherente\\
+- monotone (v)\\
+- invariante a la translation (ii)\\
+- sous-additive (iii)\\
+- Homogene (ii)\\
