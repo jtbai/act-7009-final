@@ -5,5 +5,12 @@ On cherche a demontrer que \\
 $\rho(L_1 + L_2) \leq   \rho(L_1)  + \rho(L_2)$\\
 
 Puisque $\rho$ est convexe on a que \\
-$\rho(\lambda  L_1 + (1-\lambda)L_2) \leq   \lambda$
+$\rho(\lambda  L_1 + (1-\lambda)L_2) \leq \lambda \rho(L_1)  + (1-\lambda) \rho(L_2)$\\
+
+en choississant $\lambda = 0.5$ on obtient que 
+
+$\rho(0.5 * L_1 + 0.5* L_2) \leq 0.5 \rho(L_1)  + 0.5 \rho(L_2)$\\
+la mesure est homogene (car convexe) alors\\
+$0.5 * \rho( L_1 + L_2) \leq 0.5 * ( \rho(L_1)  +  \rho(L_2))$ \\
+$\rho( L_1 + L_2) \leq  \rho(L_1)  +  \rho(L_2)$ \\
 
