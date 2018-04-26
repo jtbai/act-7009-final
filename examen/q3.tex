@@ -1,8 +1,8 @@
 \section{Question 3}
 
 Soit les trois mesures de risque suivantes :\\
-$\rho^a= sup\{L(w_i) : i= 1,2,...,m\}$\\
-$\rho^b=  sup\{L(w_i) : i= 1,2,...,m\}$\\
+$\rho^a= sup\{L(w_i) : i= 1,2,...,m\} = L_{[m]}$\\
+$\rho^b=   L_{[m-1]}$\\
 $\rho^c= sup\{\frac{L(w_i)+L(w_j)}{2} : i \neq j \in \{1,2,...,m\}\}$\\
 
 
@@ -21,7 +21,10 @@ $ = sup\{\frac{2*c}{2} \frac{L(w_i)+L(w_j)}{2}\}$\\
 $ = c*sup\{ \frac{L(w_i)+L(w_j)}{2}\}$\\
 
 \textbf{b. preuve de monotonicite des mesures $\rho^a, \rho^b, \rho^c$}\\
-???\\
+On a que $P(L_1 \le L_2) = 1, avec L_1 \preceq_{ST} L_2 \succ$, alors, )
+
+\textbf{$\rho^a$}, \textbf{$\rho^b$}, \textbf{$\rho^c$}\\
+ est une fonction monotone croissante alors les mesures de risques sont monotones\\
 
 \textbf{c. preuve d'invariance a la translation des mesures $\rho^a, \rho^b, \rho^c$}\\
 
@@ -39,7 +42,16 @@ $ = sup\{\frac{2*a}{2} + \frac{L(w_i)+L(w_j)}{2}\}$\\
 $ = sup\{ \frac{L(w_i)+L(w_j)}{2}\} + a$\\
 
 \textbf{d. preuve de sous-additivite des mesures $\rho^a, \rho^b, \rho^c$}\\
-???\\
+\textbf{$\rho^a$}\\
+$sup\{L_1 + L_2\} = sup\{L(w_i)+a\}$\\
+$ = sup\{L(w_i)\} + a$\\
+
+\textbf{$\rho^b$}\\
+elle n'est pas sous additive, voir exemple Etienne Marceau en classe.
+
+\textbf{$\rho^c$}\\
+Prouvé dans Paul Embrechts and Ruodu Wang* Seven Proofs for the Subadditivity of Expected Shortfall
+
 
 \textbf{e. interpretation des mesures $\rho^a, \rho^b, \rho^c$}\\
 $\rho^a$ : maximum des pertes\\
