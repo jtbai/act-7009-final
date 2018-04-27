@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,latexsym}
+\usepackage{graphicx}
+\usepackage{tikz-qtree}
+\usepackage{amscd}
+\usepackage{bbm}
+\usepackage{caption}
+\usepackage[french,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{rotating,amssymb,amsmath,amsfonts,delarray}
+\usepackage{geometry}
+\usepackage{placeins}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{amsthm}
+\newtheorem*{remark}{Remark}
+\geometry{hmargin=80pt, vmargin=70pt}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{tikz}
+
+
+\hypersetup{
+  colorlinks=true,
+  citecolor=blue,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=cyan,
+}
+
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+\vspace*{1cm}
+      
+\textbf{\LARGE Copules bivariées}
+                
+\vspace{0.5cm}
+ACT-3000 Théorie du risque\\
+Automne 2016
+                
+
+
+\end{center}
+\end{titlepage}
+
+
+\end{document}
