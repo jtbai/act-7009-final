@@ -51,12 +51,31 @@ j.out = read.csv("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
 counts.level = matrix(nrow=length(colnames(binary)),ncol=10)
 colnames(counts.level) = c("real pain","real 1st","real mc.lwt","real pd","real fatality","worst pain","worst 1st","worst mc.lwt","worst pd","worst fatality")
 rownames(counts.level)=colnames(binary)
+number_of_reports = nrow(binary)
 
 for (i in 1:length(colnames(binary))){
-  counts.level[i,] = c(length(which(j.out[binary[,i]==1,1]=="Pain")),length(which(j.out[binary[,i]==1,1]=="1st Aid")),length(which(j.out[binary[,i]==1,1]=="Medical Case"))+length(which(j.out[binary[,i]==1,1]=="Lost Work Time")),length(which(j.out[binary[,i]==1,1]=="Permanent Disalement")),length(which(j.out[binary[,i]==1,1]=="Fatality")),length(which(j.out[binary[,i]==1,2]=="Pain")),length(which(j.out[binary[,i]==1,2]=="1st Aid")),length(which(j.out[binary[,i]==1,2]=="Medical Case"))+length(which(j.out[binary[,i]==1,2]=="Lost Work Time")),length(which(j.out[binary[,i]==1,2]=="Permanent Disalement")),length(which(j.out[binary[,i]==1,2]=="Fatality")))}
+    
+    real.occurence = j.out[binary[,i]==1,1]
+    worst.occurence = j.out[binary[,i]==1,2]
+    
+    counts.level[i,] = c(sum(real.occurence=="Pain"),
+                       sum(real.occurence=="1st Aid"),
+                       sum(real.occurence=="Medical Case")+sum(real.occurence=="Lost Work Time"),
+                       sum(real.occurence=="Permanent Disalement"),
+                       sum(real.occurence=="Fatality"),
+                       sum(worst.occurence=="Pain"),
+                       sum(worst.occurence=="1st Aid"),
+                       sum(worst.occurence=="Medical Case")+sum(worst.occurence=="Lost Work Time"),
+                       sum(worst.occurence=="Permanent Disalement"),
+                       sum(worst.occurence=="Fatality"))
+}
 
 # sanity check
-stopifnot(all(apply(counts.level[,1:5],1,sum)==apply(binary,2,sum)))
+are_count_equals <- function(actual_by_precursor, expected_by_report){
+    all(apply(actual_by_precursor,1,sum)==apply(expected_by_report,2,sum))
+}
+
+stopifnot(are_count_equals(counts.level[,1:5], binary))
 
 # severity scores
 severity=c(12,48,192,1024,26214)
@@ -68,8 +87,11 @@ colnames(risk)=c("real outcome global risk","worst case scenario global risk","r
 
 # global risk values
 for (i in 1:length(colnames(binary))){
-  risk[i,1] = sum(counts.level[i,1:5]*severity)/nrow(binary)
-  risk[i,2] = sum(counts.level[i,6:10]*severity)/nrow(binary)
+    total.weighted.real.count.by.severity = sum(counts.level[i,1:5]*severity)
+    total.weighted.worst.count.by.severity = sum(counts.level[i,6:10]*severity)
+    
+    risk[i,1] = total.weighted.real.count.by.severity/number_of_reports
+    risk[i,2] = total.weighted.worst.count.by.severity/number_of_reports
 }
 
 # relative risk values
@@ -81,13 +103,14 @@ risk = round(risk,2)
 
 # relative risks based on real outcomes
 real = as.matrix(binary)%*%risk[,3]
-
+real_risk_severity_per_report = as.matrix(binary)%*%risk[,3]
 # relative risks based on worst possible outcomes
 worst = as.matrix(binary)%*%risk[,4]
+worst_risk_severity_per_report = as.matrix(binary)%*%risk[,4]
 
 # ========== univariate smoothed boostrap with variance correction ==========
 
-X = real
+X = real_risk_severity_per_report
 xeval = seq(min(X), max(X)+sd(X), length=length(X))
 neval = length(xeval)
 x.bar = mean(X)
@@ -105,23 +128,33 @@ for (i in 1:nsim){
   if(X.sim[i]<0) X.sim[i]=0  # a risk cannot be negative
 }
 
+boundary_corrected_domain = seq(from=0,to=max(xeval),length.out=100)
 # KDE with boundary correction based on Jones 1993 (local linear fitting at the boundary)
-b.c.k = dbckden(seq(from=0,to=max(xeval),length.out=100),X.sim,bw=bw,bcmethod="simple")
+length(b.c.k)
+b.c.k = dbckden(boundary_corrected_domain,X.sim,bw=bw,bcmethod="simple")
 hist(X,prob=TRUE,main='histogram of historical values with KDE of simulated ones')
-lines(x=seq(from=0,to=max(X)+sd(X),length.out=100),y=b.c.k,lty=1)
+lines(x=boundary_corrected_domain,y=b.c.k,lty=1)
 
 quantile(X,0.999)
 quantile(X.sim,0.999)
 
 # ========== bivariate analysis ==========
 
-plot(real,worst,xlab="risk based on real outcomes",ylab="risk based on worst possible outcomes",main="bivariate construction safety risk",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+plot(real_risk_severity_per_report,worst_risk_severity_per_report,
+     xlab="risk based on real outcomes",
+     ylab="risk based on worst possible outcomes",
+     main="bivariate construction safety risk",
+     cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+
 grid(lwd=2,col="light grey")
 
 # PSEUDO SPACE
 
 # this transforms the two original RVs to RVs having uniform distributions
-U = cbind(rank(real)/(length(real)+1),rank(worst)/(length(worst)+1))
+ranks_real_risk_severity_per_report = rank(real_risk_severity_per_report)/(length(real_risk_severity_per_report)+1)
+ranks_worst_risk_severity_per_report = rank(worst_risk_severity_per_report)/(length(worst_risk_severity_per_report)+1)
+
+U = cbind(ranks_real_risk_severity_per_report, ranks_worst_risk_severity_per_report)
 
 plot(U[,1],U[,2],xlab="pseudo risk based on real outcomes",ylab="pseudo risk based on worst possible outcomes",main="bivariate construction safety risk \n pseudo observations",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
 grid(lwd=2,col="light grey")
@@ -214,3 +247,4 @@ conditional = biv.risk.sim[(biv.risk.sim[,1]>=195)&(biv.risk.sim[,1]<=205),2]
 quantile(conditional)
 
 # so the nice thing here is that provided evidence, we can provide an estimate of how risky things can get (with a confidence band)
+
