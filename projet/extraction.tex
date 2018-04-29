@@ -199,6 +199,9 @@
 	
 \end{frame}
 
+
+
+
 \begin{frame}	
 	Transformation d'un problème textuel en problème matriciel
 	\begin{itemize}
@@ -215,6 +218,10 @@
 
 
 
+\begin{frame}	
+	Outil d'extraction
+	\includegraphics[width=\paperwidth]{rtool}
+\end{frame}
 
 \begin{frame}	
 	Pipeline habituelle en traitement de la langue natuerelle
@@ -267,12 +274,19 @@
 \begin{frame}[t]
 	
 	On a aussi la transformation séparation bi-normale. Cette transformation ajoute un poids au mots qui sont fréquemment associés avec une classe en particulier. \\
+	\bigskip
 	$RP(r, p) = RP(r, p) * \textrm{bns}(tpr, fpr)$\\
 	avec\\
 	$\textrm{bns}(tpr, fpr) = |\Phi^{-1}(tpr) - \Phi^{-1}(fpr)| $,\\
 	ou tpr est le taux de vrai positif, et fpr est le taux de faux positifs. Utile pour la classification binaire. \\
-	
+	\bigskip
 	Mes travaux de recherche portent su le généralisation de ce modèle vers une classification multiclasse 1-of-m.
+	
+\end{frame}
+
+\begin{frame}
+	
+	On peut calibrer un prédicteur!
 	
 \end{frame}
 

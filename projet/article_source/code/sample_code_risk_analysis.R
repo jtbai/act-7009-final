@@ -40,25 +40,27 @@ gaussian.kernel.copula.surface=function (u,v,n) {
 library(data.table)
 # ========== load data ==========
 
-binary = fread("sample_binary_matrix.csv",header=TRUE)
-exp.j = fread("sample_exposure_values.csv",header=TRUE)
-j.out = fread("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
+binary = read.csv("sample_binary_matrix.csv",header=TRUE)
+exp.j = read.csv("sample_exposure_values.csv",header=TRUE)
+j.out = read.csv("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
 
 # ========== compute historical risk ==========
 
 # get counts of attributes for each level of real and worst potential outcome
 # medical case and lost work time are combined, as usual
-counts.level = matrix(nrow=length(colnames(binary)),ncol=10)
-colnames(counts.level) = c("real pain","real 1st","real mc.lwt","real pd","real fatality","worst pain","worst 1st","worst mc.lwt","worst pd","worst fatality")
-rownames(counts.level)=colnames(binary)
+number_of_precursors = length(colnames(binary))
 number_of_reports = nrow(binary)
 
-for (i in 1:length(colnames(binary))){
+counts.level = matrix(nrow=number_of_precursors,ncol=10)
+colnames(counts.level) = c("real pain","real 1st","real mc.lwt","real pd","real fatality","worst pain","worst 1st","worst mc.lwt","worst pd","worst fatality")
+rownames(counts.level)=colnames(binary)
+
+for (precursor_index in 1:number_of_precursors){
     
-    real.occurence = j.out[binary[,i]==1,1]
-    worst.occurence = j.out[binary[,i]==1,2]
+    real.occurence = j.out[binary[,precursor_index]==1,1]
+    worst.occurence = j.out[binary[,precursor_index]==1,2]
     
-    counts.level[i,] = c(sum(real.occurence=="Pain"),
+    counts.level[colnames(binary)[precursor_index],] = c(sum(real.occurence=="Pain"),
                        sum(real.occurence=="1st Aid"),
                        sum(real.occurence=="Medical Case")+sum(real.occurence=="Lost Work Time"),
                        sum(real.occurence=="Permanent Disalement"),
@@ -86,12 +88,12 @@ rownames(risk)=colnames(binary)
 colnames(risk)=c("real outcome global risk","worst case scenario global risk","real outcome relative risk","worst case scenario relative risk")
 
 # global risk values
-for (i in 1:length(colnames(binary))){
-    total.weighted.real.count.by.severity = sum(counts.level[i,1:5]*severity)
-    total.weighted.worst.count.by.severity = sum(counts.level[i,6:10]*severity)
+for (precursor_index in 1:number_of_precursors){
+    total.weighted.real.count.by.severity = sum(counts.level[precursor_index,1:5]*severity)
+    total.weighted.worst.count.by.severity = sum(counts.level[precursor_index,6:10]*severity)
     
-    risk[i,1] = total.weighted.real.count.by.severity/number_of_reports
-    risk[i,2] = total.weighted.worst.count.by.severity/number_of_reports
+    risk[precursor_index,1] = total.weighted.real.count.by.severity/number_of_reports
+    risk[precursor_index,2] = total.weighted.worst.count.by.severity/number_of_reports
 }
 
 # relative risk values
@@ -100,12 +102,8 @@ risk[,4] = risk[,2]/exp.j[,2]
 
 # round values up
 risk = round(risk,2)
-
-real_not_upscaled_for_frequency = as.matrix(binary)%*%risk[,1]
-hist(real_not_upscaled_for_frequency)
 # relative risks based on real outcomes
 real = as.matrix(binary)%*%risk[,3]
-hist(real)
 
 real_risk_severity_per_report = as.matrix(binary)%*%risk[,3]
 # relative risks based on worst possible outcomes
@@ -135,6 +133,8 @@ for (i in 1:nsim){
 boundary_corrected_domain = seq(from=0,to=max(xeval),length.out=100)
 # KDE with boundary correction based on Jones 1993 (local linear fitting at the boundary)
 b.c.k = dbckden(boundary_corrected_domain,X.sim,bw=bw,bcmethod="simple")
+
+hist(X,prob=TRUE,main='histograme des valeurs de risque par rapport')
 hist(X,prob=TRUE,main='histogram of historical values with KDE of simulated ones')
 lines(x=boundary_corrected_domain,y=b.c.k,lty=1)
 
@@ -149,6 +149,14 @@ plot(real_risk_severity_per_report,worst_risk_severity_per_report,
      main="bivariate construction safety risk",
      cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
 
+
+plot(real_risk_severity_per_report,worst_risk_severity_per_report,
+     xlab="risque basé sur les résultats réels",
+     ylab="risque basé sur les résultats en pire cas",
+     main="Risque bivarié",
+     cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+
+
 grid(lwd=2,col="light grey")
 
 # PSEUDO SPACE
@@ -160,6 +168,7 @@ ranks_worst_risk_severity_per_report = rank(worst_risk_severity_per_report)/(len
 U = cbind(ranks_real_risk_severity_per_report, ranks_worst_risk_severity_per_report)
 
 plot(U[,1],U[,2],xlab="pseudo risk based on real outcomes",ylab="pseudo risk based on worst possible outcomes",main="bivariate construction safety risk \n pseudo observations",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+plot(U[,1],U[,2],xlab="pseudo risque basé sur les résultats réels",ylab="pseudo risque basé sur les résultats en pire cas",main="Risque bivarié \n pseudo observations",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
 grid(lwd=2,col="light grey")
 
 # empirical Copula density estimate based on transformed Kernels
