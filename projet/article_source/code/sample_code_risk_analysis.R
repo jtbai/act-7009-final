@@ -37,12 +37,12 @@ gaussian.kernel.copula.surface=function (u,v,n) {
   }
   return(list(x=s,y=s,z=data.matrix(mat)))
 }
-
+library(data.table)
 # ========== load data ==========
 
-binary = read.csv("sample_binary_matrix.csv",header=TRUE)
-exp.j = read.csv("sample_exposure_values.csv",header=TRUE)
-j.out = read.csv("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
+binary = fread("sample_binary_matrix.csv",header=TRUE)
+exp.j = fread("sample_exposure_values.csv",header=TRUE)
+j.out = fread("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
 
 # ========== compute historical risk ==========
 
@@ -101,8 +101,12 @@ risk[,4] = risk[,2]/exp.j[,2]
 # round values up
 risk = round(risk,2)
 
+real_not_upscaled_for_frequency = as.matrix(binary)%*%risk[,1]
+hist(real_not_upscaled_for_frequency)
 # relative risks based on real outcomes
 real = as.matrix(binary)%*%risk[,3]
+hist(real)
+
 real_risk_severity_per_report = as.matrix(binary)%*%risk[,3]
 # relative risks based on worst possible outcomes
 worst = as.matrix(binary)%*%risk[,4]
@@ -130,7 +134,6 @@ for (i in 1:nsim){
 
 boundary_corrected_domain = seq(from=0,to=max(xeval),length.out=100)
 # KDE with boundary correction based on Jones 1993 (local linear fitting at the boundary)
-length(b.c.k)
 b.c.k = dbckden(boundary_corrected_domain,X.sim,bw=bw,bcmethod="simple")
 hist(X,prob=TRUE,main='histogram of historical values with KDE of simulated ones')
 lines(x=boundary_corrected_domain,y=b.c.k,lty=1)
