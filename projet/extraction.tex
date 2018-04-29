@@ -174,7 +174,7 @@
 \end{frame}
 
 \begin{frame}	
-	Framework de la création de l'outil d'extraction
+	Framework de la création de l'outil d'extraction (NER)
 	\includegraphics[width=\paperwidth]{rtool_training_framework}
 \end{frame}
 
@@ -199,31 +199,82 @@
 	
 \end{frame}
 
-
-
-
-
-
-
 \begin{frame}	
+	Transformation d'un problème textuel en problème matriciel
 	\begin{itemize}
 		\item Automate permettant de transformer un texte libre en vecteur v tel que
 		\item v(j) = 1 si le $\textrm{précurseur}_j$ a été trouvé, 0 autrement 
 	\end{itemize}
-
-	Transformation d'un problème textuel en problème matriciel
+	
+	Et vers un problème d'apprentissage automatique
 	\begin{itemize}
 		\item Soit un jeu de données comprenant R rapports pouvant contenir P précurseurs
 		\item On obtiens la matrice creuse $\textrm{RP}^{RxP}$
-		\item Pour laquelle une matrice de sévérité $\textrm{S}^{Rx1}$ est fournie par [...]
 	\end{itemize}
-
-	
 \end{frame}
 
 
 
 
+\begin{frame}	
+	Pipeline habituelle en traitement de la langue natuerelle
+	
+	\begin{itemize}
+		\item Tokenisation - transformer les textes en matrice creuse
+		\begin{itemize}
+			\item Part of speach tagging
+			\item Normalisation
+			\item N-gram
+		\end{itemize}
+		
+		\item Ponderation - mettre de l'emphase sur certains mots
+		\begin{itemize}
+			\item TF/IDF
+			\item Separation Bi-Normale
+		\end{itemize}
+		
+		\item Calibration d'un prédicteur - transférer les connaissance à la machine apprenante
+		\begin{itemize}
+			\item Utilisation d'une table de vérité, ou d'un oracle.
+			\item SVM, Boosing, etc...
+		\end{itemize}
+		
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+	
+	Soit la matrice creuse RP suivante, \\
+	\begin{tabular}[t]{lcccc}
+		rapport & $w_1$ & $w_2$ & ... & $w_p$ \\
+		$\textrm{rapport}_1$ & 1 & 0 &  & 1 \\
+		$\textrm{rapport}_2$ & 1 & 0 &  & 1 \\
+		$\textrm{rapport}_3$ & 0 & 1 &  & 1 \\
+		... &  &  &  & \\
+		$\textrm{rapport}_R$ & 1 & 1 &  & 1 \\
+	\end{tabular}\\
+	\bigskip
+	On a la transformation TF-IDF. Cette transformation pénalise les mots qui sont utilisés dans beaucoup de documents\\
+	\bigskip
+	
+	$RP(r, p) = RP(r, p) * \textrm{td-idf}(w_p, d, n_w, r)$, avec \\
+	$\textrm{td-idf}(w_p, d, n_w, r) = \frac{f(w_p, d)}{\sum_{w' \in d}f(w', d)} * -\log(\frac{n_w}{r})$,\\
+	ou $w_p$ est le précurseurs a pondérer, d est le rapport,  $n_w$ le nombre de document contenant le précursuer $w_p$ et r nombre total de rapport.	
+	
+\end{frame}
+	
+
+\begin{frame}[t]
+	
+	On a aussi la transformation séparation bi-normale. Cette transformation ajoute un poids au mots qui sont fréquemment associés avec une classe en particulier. \\
+	$RP(r, p) = RP(r, p) * \textrm{bns}(tpr, fpr)$\\
+	avec\\
+	$\textrm{bns}(tpr, fpr) = |\Phi^{-1}(tpr) - \Phi^{-1}(fpr)| $,\\
+	ou tpr est le taux de vrai positif, et fpr est le taux de faux positifs. Utile pour la classification binaire. \\
+	
+	Mes travaux de recherche portent su le généralisation de ce modèle vers une classification multiclasse 1-of-m.
+	
+\end{frame}
 
 
 
