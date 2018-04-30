@@ -113,15 +113,15 @@
 \begin{frame}
 	Normalisation des mots
 	\begin{itemize}
-		\item Analyse morphologique (Connassaince de la langue)
+		\item Analyse morphologique (connassaince de la langue)
 		\begin{itemize}
-			\item Beau, Magifnique, Joli ...
+			\item Beau, Magnifique, Joli ...
 		\end{itemize}	
-		\item Lemmatisation (Utilisation d'un lexique)
+		\item Lemmatisation (utilisation d'un lexique)
 		\begin{itemize}
 			\item Beau, Beaux, Belle, Belles ...
 		\end{itemize}	
-		\item Racinisation (Ensemble de règles)
+		\item Racinisation (ensemble de règles)
 		\begin{itemize}
 			\item Beau -> Bel, Beaux -> Bel, Belle -> Bel, Belles ...
 			\item Organisation -> Organ, Organe -> Organ
@@ -152,7 +152,7 @@
 		\begin{itemize}
 			\item $\textrm{argmax}_{t^1}  \prod_{i=1}^{n}  P(W_i|t_i) P(t_i|t_{i-1}) $
 			\item Pour tous les mots de la phrase, en même temps.
-			\item Problème NP complexe - utilisation possible de la programmation dynamique.
+			\item Problème NP difficile - utilisation possible de la programmation dynamique.
 		\end{itemize}
 	\end{itemize}
 	Dans l'article ils ont utiliés les mots de préposition pour inférer le type lexical au lieu d'ajouter des l'information aux intrants.
@@ -264,8 +264,8 @@
 	On a la transformation TF-IDF. Cette transformation pénalise les mots qui sont utilisés dans beaucoup de documents\\
 	\bigskip
 	
-	$RP(r, p) = RP(r, p) * \textrm{td-idf}(w_p, d, n_w, r)$, avec \\
-	$\textrm{td-idf}(w_p, d, n_w, r) = \frac{f(w_p, d)}{\sum_{w' \in d}f(w', d)} * -\log(\frac{n_w}{r})$,\\
+	$RP(r, p) = RP(r, p) \times \textrm{td-idf}(w_p, d, n_w, r)$, avec \\
+	$\textrm{td-idf}(w_p, d, n_w, r) = \frac{f(w_p, d)}{\sum_{w' \in d}f(w', d)} \times (-\log(\frac{n_w}{r}))$,\\
 	ou $w_p$ est le précurseurs a pondérer, d est le rapport,  $n_w$ le nombre de document contenant le précursuer $w_p$ et r nombre total de rapport.	
 	
 \end{frame}
