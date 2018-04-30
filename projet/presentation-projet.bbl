@@ -1,5 +1,11 @@
 \begin{thebibliography}{THRB16}
 
+\bibitem[Des14]{desvignes}
+Matthieu Desvignes.
+\newblock {\em Requisite empirical risk data for integration of safety with
+  advanced technologies and intelligent systems}.
+\newblock PhD thesis, University of Colorado at Boulder, 2014.
+
 \bibitem[SCF07]{charpentier}
 Olivier Scaillet, Arthur Charpentier, and Jean-David Fermanian.
 \newblock The estimation of copulas: Theory and practice.
@@ -17,5 +23,11 @@ Antoine J.-P. Tixier, Matthew~R. Hallowell, Balaji Rajagopalan, and Dean
   language processing system to extract precursors and outcomes from
   unstructured injury reports.
 \newblock {\em Automation in Construction}, 62:45 -- 56, 2016.
+
+\bibitem[Vil14]{prades}
+Marc~Prades Villanova.
+\newblock {\em Attribute-based risk model for assessing risk to industrial
+  construction tasks}.
+\newblock PhD thesis, University of Colorado at Boulder, 2014.
 
 \end{thebibliography}
