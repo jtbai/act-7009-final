@@ -1,7 +1,36 @@
 \section{Question 15}
-a. $X \leq_{SL} Y$ implique que $TVaR(x) \leq TVaR(Y)$\\
+a. $X \leq_{SL} Y \leftrightarrow TVaR(x) \leq TVaR(Y)$\\
 
-b. Voir p.282 de l'article\\
+b. Copie de la page p.582 de l'article\\
+
+Alors, en choissisant d = $VaR_p$, nous trouvons\\
+
+$TVaR_p(X) = VaR_p(X) + \frac{1}{1-p}E[(X-VaR_p(X))_+]$ \\
+$= \frac{f(VaR_p(X))}{1-p}$ \\
+$\leq \frac{f(VaR_p(Y))}{1-p}$ \\
+$= VaR_p(Y) + \frac{1}{1-p}E[(Y-VaR_p(Y))_+]$ \\
+$\leq TVaR_p(Y).$\\
+
+
+Pour prouver l'autre implication, on assume que les TVaR sont ordonnées pour tout $p \in (0,1)$. Notez que pour toute variable aléatoire X, nous avons que\\
+
+$E[(X-d)_+] = (F^{-1}_X(U) - d)_+ $\\
+$ = \int_{F_X(D)}^{1} Q_q[X]dq-d(1-F_x(d))$.\\
+
+
+Alors, pour d tel que $ 0 \le F_x(d) \le 1$, nous trouvons
+
+$E[(X-d)_+] = (TVaR_{F_X(d)}(X) - d)(1-F_X(d)) $\\
+$\leq (TVaR_{F_X(d)}(Y) - d)(1-F_X(d)) $\\
+$= \int_{F_X(D)}^{1} VaR_q(Y) dq - d(1-F_X(d))$\\
+$ = \int_{F_Y(D)}^{1} VaR_q(Y) dq - d(1-F_Y(d)) +
+\int_{F_X(D)}^{F_Y(D)} VaR_q(Y) dq - d(F_Y(d) - F_X(d))$ \\
+$= E[(Y-d)_+] + \int_{F_X(D)}^{F_Y(D)} (VaR_q(Y)-q) dq$\\
+
+
+En utilisant l'équivalence $q \le F_y(d) \leftrightarrow d \geq Q_q[Y]$, il est trivial de prouver que \\
+
+$\int_{F_X(D)}^{F_Y(D)} (Q_q[Y] - d) dq \le 0$
 
 c. $\sigma_2 \geq \sigma_1$, alors la loi normale ayant une variance $\sigma_2$ aura une queue plus epaisse et une probabilte modale moins probable. Ainsi, le risque utilisant $\sigma_2$ aura plus de probabilite sur les valeurs plus grande de X.\\
 
