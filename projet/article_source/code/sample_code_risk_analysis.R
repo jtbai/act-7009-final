@@ -1,6 +1,9 @@
 # author: Antoine J.-P. Tixier
 # date: Feb-Mar 2015
 
+# refactorer : Jean-Thomas Baillargeon
+# date: April 2018
+
 # please cite:
 
 # MLA
@@ -24,24 +27,28 @@ library(evmix)
 
 # function courtesy of Prof. Arthur Charpentier
 gaussian.kernel.copula.surface=function (u,v,n) {
-    s=seq(1/(n+1), length=n, by=1/(n+1))
-    mat=matrix(NA,nrow = n, ncol = n)
-    sur=kde2d(qnorm(u),qnorm(v),n=1000,lims = c(-4, 4, -4, 4))
-    su=sur$z
+    support = seq(1/(n+1), length=n, by=1/(n+1))
+    copula_density = matrix(NA, nrow = n, ncol = n)
+    number_of_evaluation = 1000
+    min_copula_value = -4
+    max_copula_value = 4
+    copula_range = max_copula_value - min_copula_value 
+    square_copula_limit = c(min_copula_value, max_copula_value, min_copula_value, max_copula_value)
+    surface = kde2d(qnorm(u), qnorm(v), n=number_of_evaluation, lims=square_copula_limit)
+    surface_density =surface$z
   for (i in 1:n) {
     for (j in 1:n) {
-      Xi=round((qnorm(s[i])+4)*1000/8)+1;
-      Yj=round((qnorm(s[j])+4)*1000/8)+1
-      Ximat[i,j]<-su[Xi,Yj]/(dnorm(qnorm(s[i]))*dnorm(qnorm(s[j])))
+      Xi=round((qnorm(s[i])-min_copula_value)*number_evaluation/copula_range)+1;
+      Yj=round((qnorm(s[j])-min_copula_value)*number_evaluation/copula_range)+1
+      copula_density[i,j]<-surface_density[Xi,Yj]/(dnorm(qnorm(s[i]))*dnorm(qnorm(s[j])))
     }
   }
-  return(list(x=s,y=s,z=data.matrix(mat)))
+  return(list(x=support,y=support,z=data.matrix(copula_density)))
 }
-library(data.table)
 # ========== load data ==========
 
 binary = read.csv("sample_binary_matrix.csv",header=TRUE)
-exp.j = read.csv("sample_exposure_values.csv",header=TRUE)
+probability_of_precursor_on_site = read.csv("sample_exposure_values.csv",header=TRUE)
 j.out = read.csv("sample_outcomes.csv",header=TRUE,stringsAsFactors=FALSE)
 
 # ========== compute historical risk ==========
@@ -53,7 +60,7 @@ number_of_reports = nrow(binary)
 
 counts.level = matrix(nrow=number_of_precursors,ncol=10)
 colnames(counts.level) = c("real pain","real 1st","real mc.lwt","real pd","real fatality","worst pain","worst 1st","worst mc.lwt","worst pd","worst fatality")
-rownames(counts.level)=colnames(binary)
+rownames(counts.level) = colnames(binary)
 
 for (precursor_index in 1:number_of_precursors){
     
@@ -97,17 +104,14 @@ for (precursor_index in 1:number_of_precursors){
 }
 
 # relative risk values
-risk[,3] = risk[,1]/exp.j[,2]
-risk[,4] = risk[,2]/exp.j[,2]
+risk[,3] = risk[,1]/probability_of_precursor_on_site[,2]
+risk[,4] = risk[,2]/probability_of_precursor_on_site[,2]
 
 # round values up
 risk = round(risk,2)
 # relative risks based on real outcomes
-real = as.matrix(binary)%*%risk[,3]
-
 real_risk_severity_per_report = as.matrix(binary)%*%risk[,3]
 # relative risks based on worst possible outcomes
-worst = as.matrix(binary)%*%risk[,4]
 worst_risk_severity_per_report = as.matrix(binary)%*%risk[,4]
 
 # ========== univariate smoothed boostrap with variance correction ==========
@@ -249,9 +253,13 @@ par(mfrow=c(2,1))
 par(mar=rep(4,4))
 
 plot(real,worst,xlab="risk based on real outcomes",ylab="risk based on worst possible outcomes",main="bivariate construction safety risk",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+plot(real,worst,xlab="risque basé sur les résultats réels",ylab="risque basé sur les résultats en pire cas",main="Risque bivarié ",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
+
 grid(lwd=2,col="light grey")
 
 plot(biv.risk.sim[,1],biv.risk.sim[,2],xlab="risk based on real outcomes",ylab="risk based on worst possible outcomes",main="simulated values \n n=10^5",cex.axis=0.6,cex.main=0.8,cex.lab=0.7,pch=".",cex=0.6,xaxt="n")
+plot(biv.risk.sim[,1],biv.risk.sim[,2],xlab="risque basé sur les résultats réels",ylab="risque basé sur les résultats en pire cas",main="Valeur simulées \n n=10^5",cex.axis=0.6,cex.main=0.8,cex.lab=0.7,pch=".",cex=0.6,xaxt="n")
+
 axis(1,at=seq(0,700,by=100),labels=seq(0,700,by=100),cex.axis=0.6)
 abline(v=seq(0,700,by=100),col="lightgray",lty = "dotted",lwd=2)
 abline(h=seq(0,10e3,by=2e3),col="lightgray",lty = "dotted",lwd=2)
@@ -280,9 +288,13 @@ range(worst)
 real.risk = 200
 
 # select values of worst risk corresponding to real.risk meeting this criteria
-conditional = biv.risk.sim[(biv.risk.sim[,1]>=195)&(biv.risk.sim[,1]<=205),2]
 
-quantile(conditional)
+# Ajusté pour l'exemple de la présentation
+conditional_1 = biv.risk.sim[(biv.risk.sim[,1]>=12)&(biv.risk.sim[,1]<=22),2]
+quantile(conditional_1, 0.8)
+
+conditional_2 = biv.risk.sim[(biv.risk.sim[,1]>=69)&(biv.risk.sim[,1]<=79),2]
+quantile(conditional_2, 0.8)
 
 # so the nice thing here is that provided evidence, we can provide an estimate of how risky things can get (with a confidence band)
 
