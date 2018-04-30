@@ -24,6 +24,7 @@
 # ==============================
 
 library(evmix)
+library(plotly)
 
 par(mfrow = c(1,1))
 # function courtesy of Prof. Arthur Charpentier
@@ -139,7 +140,7 @@ boundary_corrected_domain = seq(from=0,to=max(xeval),length.out=100)
 b.c.k = dbckden(boundary_corrected_domain,X.sim,bw=bw,bcmethod="simple")
 
 hist(X,prob=TRUE,main='histograme des valeurs de risque par rapport')
-hist(X,prob=TRUE,main='histogram of historical values with KDE of simulated ones')
+#hist(X,prob=TRUE,main='histogram of historical values with KDE of simulated ones')
 lines(x=boundary_corrected_domain,y=b.c.k,lty=1)
 
 #Validation of the methodology
@@ -270,13 +271,13 @@ par(mar=rep(4,4))
 # bivariate quantile estimation
 
 # conditional quantile
-quantile(biv_risk_sim[,1],0.95)
+quantile(biv_risk_sim[,1], 0.95)
 quantile(real_risk_severity_per_report,0.95) # just to compare
 
 range(biv_risk_sim[,1])
 range(real_risk_severity_per_report)
 
-quantile(biv_risk_sim[,2],0.95)
+quantile(biv_risk_sim[,2], 0.95)
 quantile(worst_risk_severity_per_report,0.95) # just to compare
 
 range(biv_risk_sim[,2])
