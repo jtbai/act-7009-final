@@ -24,15 +24,15 @@ library(evmix)
 
 # function courtesy of Prof. Arthur Charpentier
 gaussian.kernel.copula.surface=function (u,v,n) {
-  s=seq(1/(n+1), length=n, by=1/(n+1))
-  mat=matrix(NA,nrow = n, ncol = n)
-  sur=kde2d(qnorm(u),qnorm(v),n=1000,lims = c(-4, 4, -4, 4))
-  su=sur$z
+    s=seq(1/(n+1), length=n, by=1/(n+1))
+    mat=matrix(NA,nrow = n, ncol = n)
+    sur=kde2d(qnorm(u),qnorm(v),n=1000,lims = c(-4, 4, -4, 4))
+    su=sur$z
   for (i in 1:n) {
     for (j in 1:n) {
       Xi=round((qnorm(s[i])+4)*1000/8)+1;
       Yj=round((qnorm(s[j])+4)*1000/8)+1
-      mat[i,j]<-su[Xi,Yj]/(dnorm(qnorm(s[i]))*dnorm(qnorm(s[j])))
+      Ximat[i,j]<-su[Xi,Yj]/(dnorm(qnorm(s[i]))*dnorm(qnorm(s[j])))
     }
   }
   return(list(x=s,y=s,z=data.matrix(mat)))
@@ -167,13 +167,24 @@ ranks_worst_risk_severity_per_report = rank(worst_risk_severity_per_report)/(len
 
 U = cbind(ranks_real_risk_severity_per_report, ranks_worst_risk_severity_per_report)
 
+
 plot(U[,1],U[,2],xlab="pseudo risk based on real outcomes",ylab="pseudo risk based on worst possible outcomes",main="bivariate construction safety risk \n pseudo observations",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
 plot(U[,1],U[,2],xlab="pseudo risque basé sur les résultats réels",ylab="pseudo risque basé sur les résultats en pire cas",main="Risque bivarié \n pseudo observations",cex.axis=0.6,cex.main=0.8,cex.lab=0.7)
 grid(lwd=2,col="light grey")
 
+
+
+kd <- with(MASS::geyser, MASS::kde2d(duration, waiting, n = 50))
+surface=kde2d(qnorm(U[,1]),qnorm(U[,1]),n=1000,lims = c(-4, 4, -4, 4))
+plot_ly(x = output$x, y = output$y, z = output$z) %>% add_surface()
+
 # empirical Copula density estimate based on transformed Kernels
 output = gaussian.kernel.copula.surface(U[,1],U[,2],n=71)
+plot_ly(x = output$x, y = output$y, z = output$z) %>% add_surface()
+
+par(mfrow = c(1,1))
 image(output$x,output$y,output$z,col=gray.colors(50,start=1,end=0),xlab="pseudo risk based on real outcomes",ylab="pseudo risk based on worst potential outcomes",main="nonparametric Copula density estimate",cex.lab=0.5,cex.main=0.8,cex.axis=0.5)
+image(output$x,output$y,output$z,col=gray.colors(50,start=1,end=0),xlab="pseudo risque basé sur les résultats réels",ylab="pseudo risque basé sur les résultats en pire cas",main="Densité estimé de la copule non paramétrique",cex.lab=0.5,cex.main=0.8,cex.axis=0.5)
 contour(output$x,output$y,output$z,add=TRUE,nlevels=50,drawlabels=FALSE,col="dark grey")
 points(U[,1],U[,2])
 grid(lwd=2)
@@ -213,9 +224,24 @@ for (i in 1:nsim){
   
 }
 
-# remove -999 values
+
+
+# this transforms the two original RVs to RVs having uniform distributions
+par(mfrow=c(1,1))
 index.remove = which(apply(biv.risk.sim,1,function(x){any(x==-999)})==TRUE)
 biv.risk.sim = biv.risk.sim[-index.remove,]
+
+x_simulated =biv.risk.sim[,1]
+y_simulated =biv.risk.sim[,2]
+
+simulated_ranks_real_risk_severity_per_report = rank(x_simulated)/(length(x_simulated)+1)
+simulated_ranks_worst_risk_severity_per_report = rank(y_simulated)/(length(y_simulated)+1)
+
+U_simulated = cbind(simulated_ranks_real_risk_severity_per_report, simulated_ranks_worst_risk_severity_per_report)
+#Bizzare
+plot(simulated_ranks_real_risk_severity_per_report,simulated_ranks_worst_risk_severity_per_report)
+
+# remove -999 values
 
 # compare simulated values to original observations
 

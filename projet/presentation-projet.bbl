@@ -1,0 +1,21 @@
+\begin{thebibliography}{THRB16}
+
+\bibitem[SCF07]{charpentier}
+Olivier Scaillet, Arthur Charpentier, and Jean-David Fermanian.
+\newblock The estimation of copulas: Theory and practice.
+\newblock 2007.
+
+\bibitem[THR17]{tixier2017construction}
+Antoine J-P Tixier, Matthew~R Hallowell, and Balaji Rajagopalan.
+\newblock Construction safety risk modeling and simulation.
+\newblock {\em Risk analysis}, 37(10):1917--1935, 2017.
+
+\bibitem[THRB16]{tixierNLP}
+Antoine J.-P. Tixier, Matthew~R. Hallowell, Balaji Rajagopalan, and Dean
+  Bowman.
+\newblock Automated content analysis for construction safety: A natural
+  language processing system to extract precursors and outcomes from
+  unstructured injury reports.
+\newblock {\em Automation in Construction}, 62:45 -- 56, 2016.
+
+\end{thebibliography}
